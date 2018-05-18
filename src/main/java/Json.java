@@ -11,6 +11,8 @@ import org.json.simple.parser.ParseException;
 
 public class Json {
 
+    // this is an example of how the program could use data from a json file to create nodes. At the moment it merely
+    // tells you which nodes and edges you have specified in example.json
     public static String readJson() throws ParseException, IOException {
         String ret = "";
 
