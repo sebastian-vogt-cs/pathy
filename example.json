@@ -1,1 +1,7 @@
-{"cities":["New York","Bangalore","San Francisco"],"name":"Pankaj Kumar","age":32}
+{
+  "connections": {
+    "a": ["b", 5],
+    "b": ["c", 8],
+    "c": ["a", 10]
+  }
+}
