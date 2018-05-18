@@ -22,6 +22,8 @@ repositories {
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     compile 'com.google.guava:guava:21.0'
+    // Library for JSON
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'

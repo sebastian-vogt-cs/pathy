@@ -9,4 +9,13 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
     }
+
+    public String parseJson() {
+        try {
+            return Json.readJson();
+        } catch (Exception ex) {
+            System.out.println("Exception in json parser: " + ex.getMessage() + ". Stacktrace: " + ex.getStackTrace());
+        }
+        return null;
+    }
 }
