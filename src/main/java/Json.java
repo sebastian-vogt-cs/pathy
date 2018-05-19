@@ -9,12 +9,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import static java.lang.Math.toIntExact;
+
 public class Json {
 
     // this is an example of how the program could use data from a json file to create nodes. At the moment it merely
     // tells you which nodes and edges you have specified in example.json
-    public static String readJson() throws ParseException, IOException {
-        String ret = "";
+    public static NodeHandler readJson() throws ParseException, IOException, IllegalEdgeException {
+        NodeHandler handler = new NodeHandler();
 
         JSONParser parser = new JSONParser();
         Reader reader = new FileReader("example.json");
@@ -28,15 +30,13 @@ public class Json {
         for (HashMap.Entry<String, JSONArray> entry : data.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            ret = ret + key + " is connected to ";
             Iterator it = ((JSONArray) value).iterator();
-            ret = ret + it.next() + " with the distance of: " + it.next() + "\n";
-
+            handler.connect(key, (String) it.next(), toIntExact(((long) it.next())));
         }
 
         reader.close();
 
-        return ret;
+        return handler;
     }
 
 }

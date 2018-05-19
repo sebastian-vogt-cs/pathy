@@ -8,14 +8,15 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
-        System.out.println(new App().parseJson());
+        NodeHandler handler = new App().parseJson();
+        System.out.print(handler.toString());
     }
 
-    public String parseJson() {
+    public NodeHandler parseJson() {
         try {
             return Json.readJson();
         } catch (Exception ex) {
-            System.out.println("Exception in json parser: " + ex.getMessage() + ". Stacktrace: " + ex.getStackTrace());
+            System.out.println("Exception in json parser: " + ex.getMessage() + ". Cause: " + ex.getCause());
         }
         return null;
     }
