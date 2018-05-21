@@ -51,7 +51,7 @@ public class NodeHandler {
             for (HashMap.Entry<Node, Integer> entry : n.getEdges().entrySet()) {
                 Node key = entry.getKey();
                 Integer value = entry.getValue();
-                ret = ret + " " + key.getName() + ", " + value + "; ";
+                ret = ret + " " + key.getName() + "," + value + ";";
             }
             ret = ret + "\n";
         }

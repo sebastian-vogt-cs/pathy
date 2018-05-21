@@ -31,7 +31,15 @@ public class Json {
             String key = entry.getKey();
             Object value = entry.getValue();
             Iterator it = ((JSONArray) value).iterator();
-            handler.connect(key, (String) it.next(), toIntExact(((long) it.next())));
+            Iterator it_save = ((JSONArray) value).iterator();
+            try {
+                handler.connect(key, (String) it.next(), toIntExact(((long) it.next())));
+            } catch(Exception ex) {
+                while(it_save.hasNext()) {
+                    Iterator it2 = ((JSONArray) it_save.next()).iterator();
+                    handler.connect(key, (String) it2.next(), toIntExact(((long) it2.next())));
+                }
+            }
         }
 
         reader.close();
