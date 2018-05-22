@@ -4,16 +4,9 @@ import java.util.Vector;
 public class NodeHandler {
 
     // this vector stores all the nodes
-    private Vector<Node> nodes = new Vector<Node>();
+    private Vector<Node> nodes = new Vector<>();
 
-    public void addNode(Node n) throws IllegalEdgeException {
-        if(getNodeByName(n.getName()) != null) {
-            throw new IllegalEdgeException("You tried to create an existing node");
-        }
-        nodes.add(n);
-    }
-
-    public void connect(String name1, String name2, Integer len) throws IllegalEdgeException {
+    void connect(String name1, String name2, Integer len) throws IllegalEdgeException {
         Node node1 = getNodeByName(name1);
         Node node2 = getNodeByName(name2);
         if (node1 == null && node2 == null) {
@@ -35,7 +28,7 @@ public class NodeHandler {
         }
     }
 
-    public Node getNodeByName(String name) {
+    private Node getNodeByName(String name) {
         for(Node node : nodes) {
             if(node.getName().equals(name)) {
                 return node;
@@ -45,17 +38,17 @@ public class NodeHandler {
     }
 
     public String toString() {
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         for(Node n : nodes) {
-            ret = ret + n.getName() + "->";
+            ret.append(n.getName()).append("->");
             for (HashMap.Entry<Node, Integer> entry : n.getEdges().entrySet()) {
                 Node key = entry.getKey();
                 Integer value = entry.getValue();
-                ret = ret + " " + key.getName() + "," + value + ";";
+                ret.append(" ").append(key.getName()).append(",").append(value).append(";");
             }
-            ret = ret + "\n";
+            ret.append("\n");
         }
-        return ret;
+        return ret.toString();
     }
 
 }

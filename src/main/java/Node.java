@@ -1,25 +1,25 @@
 import java.util.HashMap;
 
-public class Node {
+class Node {
 
     // each node has a name and all the nodes it's connected to
     private String name;
-    private HashMap<Node, Integer> edges = new HashMap<Node, Integer>();
+    private HashMap<Node, Integer> edges = new HashMap<>();
 
-    public Node(String name) {
+    Node(String name) {
         this.name = name;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public HashMap<Node, Integer> getEdges() {
+    HashMap<Node, Integer> getEdges() {
         return edges;
     }
 
     // if you want to connect a specified node with a specified edge length...
-    public void connect_node(Node node, Integer length) throws IllegalEdgeException {
+    void connect_node(Node node, Integer length) throws IllegalEdgeException {
         // ...it first looks for already connected nodes with the same name and throws an exception if it exists...
             for (Node key : edges.keySet()) {
                 if (key.getName().equals(node.getName())) {

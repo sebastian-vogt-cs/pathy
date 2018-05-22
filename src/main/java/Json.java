@@ -11,11 +11,11 @@ import org.json.simple.parser.ParseException;
 
 import static java.lang.Math.toIntExact;
 
-public class Json {
+class Json {
 
     // this is an example of how the program could use data from a json file to create nodes. At the moment it merely
     // tells you which nodes and edges you have specified in example.json
-    public static NodeHandler readJson() throws ParseException, IOException, IllegalEdgeException {
+    static NodeHandler readJson() throws ParseException, IOException, IllegalEdgeException {
         NodeHandler handler = new NodeHandler();
 
         JSONParser parser = new JSONParser();
@@ -25,6 +25,7 @@ public class Json {
 
         JSONObject jsonObject = (JSONObject) jsonObj;
 
+        @SuppressWarnings("unchecked")
         HashMap<String, JSONArray> data = (HashMap) jsonObject.get("connections");
 
         for (HashMap.Entry<String, JSONArray> entry : data.entrySet()) {
