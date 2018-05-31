@@ -18,7 +18,7 @@ public class App {
 
     NodeHandler parseJson() {
         try {
-            return Json.readJson();
+            return Json.readJson("example.json");
         } catch (Exception ex) {
             System.out.println("Exception in json parser: " + ex.getMessage() + ". Cause: " + ex.getCause());
         }
