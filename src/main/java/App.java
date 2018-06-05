@@ -19,8 +19,12 @@ public class App {
     NodeHandler parseJson() {
         try {
             return Json.readJson("example.json");
-        } catch (Exception ex) {
-            System.out.println("Exception in json parser: " + ex.getMessage() + ". Cause: " + ex.getCause());
+        } catch(ClassCastException ex) {
+            System.out.println("Error: Wrong data type supplied");
+        } catch(NumberFormatException ex) {
+            System.out.println("Error: Number too large");
+        }catch (Exception ex) {
+            System.out.println("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
         }
         return null;
     }
