@@ -7,7 +7,11 @@ public class App {
     }
 
     void mainLoop() {
-        Interactive.handlerFromFile().ifPresent(handler -> System.out.println(handler.toString()));
+        Interactive.handlerFromFile().ifPresent(handler -> {
+            System.out.println(handler.toString());
+            Renderer<Integer> ren = new Renderer<>();
+            ren.render(handler);
+        });
     }
 
 }

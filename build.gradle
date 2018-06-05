@@ -27,6 +27,10 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+
+    // https://mvnrepository.com/artifact/org.graphstream/gs-core
+    compile group: 'org.graphstream', name: 'gs-core', version: '1.1.1'
+
 }
 
 // Define the main class for the application

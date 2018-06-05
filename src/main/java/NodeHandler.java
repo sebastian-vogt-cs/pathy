@@ -6,6 +6,10 @@ public class NodeHandler<T> {
     // this vector stores all the nodes
     private Vector<Node<T>> nodes = new Vector<>();
 
+    Vector<Node<T>> getNodes() {
+        return nodes;
+    }
+
     void connect(String name1, String name2, T len) throws IllegalEdgeException {
         Node<T> node1 = getNodeByName(name1);
         Node<T> node2 = getNodeByName(name2);
