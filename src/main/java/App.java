@@ -7,25 +7,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-        NodeHandler handler = new App().parseJson();
-        if(handler == null) {
-            System.out.print("error");
-        } else {
-            System.out.print(handler.toString());
-        }
-    }
-
-    NodeHandler parseJson() {
-        try {
-            return Json.readJson("example.json");
-        } catch(ClassCastException ex) {
-            System.out.println("Error: Wrong data type supplied");
-        } catch(NumberFormatException ex) {
-            System.out.println("Error: Number too large");
-        }catch (Exception ex) {
-            System.out.println("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
-        }
-        return null;
+        Interactive.start();
     }
 }
