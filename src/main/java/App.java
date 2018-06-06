@@ -6,12 +6,12 @@ public class App {
         new App().mainLoop();
     }
 
-    void mainLoop() {
-        Interactive.handlerFromFile().ifPresent(handler -> {
-            System.out.println(handler.toString());
-            Renderer<Integer> ren = new Renderer<>();
-            ren.render(handler);
-        });
+    Interactive interactive = new Interactive();
+
+    private void mainLoop() {
+        while(true) {
+            interactive.interpretCommand();
+        }
     }
 
 }

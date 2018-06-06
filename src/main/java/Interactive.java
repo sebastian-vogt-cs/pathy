@@ -4,24 +4,26 @@ import java.util.Scanner;
 
 class Interactive {
 
-    static Optional<NodeHandler> handlerFromFile(){
-        System.out.println("Type your filename");
+    private Renderer<Integer> ren = new Renderer<>();
+
+    void interpretCommand() {
+        System.out.println("Type your command");
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
-        try {
-            return Optional.of(Json.readJson(input));
-        } catch(ClassCastException ex) {
-            System.out.println("Error: Wrong data type supplied");
-            return Optional.empty();
-        } catch(NumberFormatException ex) {
-            System.out.println("Error: Number too large");
-            return Optional.empty();
-        } catch(FileNotFoundException ex) {
-            System.out.println("file not found");
-            return Optional.empty();
-        } catch (Exception ex) {
-            System.out.println("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
-            return Optional.empty();
+
+        if(input.equals("read file")) {
+            System.out.println("Type filename");
+            String in = sc.nextLine();
+            NodeHandler.handlerFromFile(in).ifPresent(handler -> {
+                System.out.println(handler.toString());
+                ren.render(handler);
+            });
+        } else if(input.length() > 5 && input.substring(0, 4).equals("mark")) {
+             if (!ren.mark(input.substring(5))) {
+                 System.out.println("Node not found");
+             }
+        } else {
+            System.out.println("Command not found");
         }
     }
 

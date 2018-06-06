@@ -4,13 +4,25 @@ import org.graphstream.graph.implementations.*;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class Renderer<T> {
+class Renderer<T> {
 
-    void render(NodeHandler handler) {
+    private String styleSheet =
+            "node {" +
+                    "	fill-color: black;" +
+                    "}" +
+                    "node.marked {" +
+                    "	fill-color: red;" +
+                    "}";
+    private Graph graph;
 
-        Graph graph = new SingleGraph("graph");
+    Renderer() {
+        graph = new SingleGraph("graph");
         graph.setStrict(false);
         graph.setAutoCreate( true );
+        graph.addAttribute("ui.stylesheet", styleSheet);
+    }
+
+    void render(NodeHandler handler) {
 
         for(Object nd : handler.getNodes()){
             Node<T> node = (Node) nd;
@@ -31,6 +43,15 @@ public class Renderer<T> {
         }
 
         graph.display();
+    }
+
+    boolean mark(String name) {
+        try{
+            graph.getNode(name).addAttribute("ui.class", "marked");
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
 }

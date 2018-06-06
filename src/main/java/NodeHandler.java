@@ -1,4 +1,7 @@
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.Vector;
 
 public class NodeHandler<T> {
@@ -53,6 +56,24 @@ public class NodeHandler<T> {
             ret.append("\n");
         }
         return ret.toString();
+    }
+
+    static Optional<NodeHandler> handlerFromFile(String input){
+        try {
+            return Optional.of(Json.readJson(input));
+        } catch(ClassCastException ex) {
+            System.out.println("Error: Wrong data type supplied");
+            return Optional.empty();
+        } catch(NumberFormatException ex) {
+            System.out.println("Error: Number too large");
+            return Optional.empty();
+        } catch(FileNotFoundException ex) {
+            System.out.println("file not found");
+            return Optional.empty();
+        } catch (Exception ex) {
+            System.out.println("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
+            return Optional.empty();
+        }
     }
 
 }
