@@ -2,7 +2,6 @@ import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 class Renderer<T> {
 
@@ -52,6 +51,16 @@ class Renderer<T> {
         } catch (Exception ex) {
             return false;
         }
+    }
+
+    void addNode(String name) {
+        graph.addNode(name);
+        graph.getNode(name).addAttribute("ui.label", name);
+    }
+
+    void addEdge(String name, String name2, String len) {
+        graph.addEdge(name + name2, name, name2);
+        graph.getEdge(name + name2).addAttribute("ui.label", len);
     }
 
 }
