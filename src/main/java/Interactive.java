@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 class Interactive {
 
-    private Renderer<Integer> ren = new Renderer<>();
+    private Renderer ren = new Renderer<>();
+    private NodeHandler handler = null;
 
     void interpretCommand() {
         System.out.println("Type your command");
@@ -18,6 +19,7 @@ class Interactive {
                 NodeHandler.handlerFromFile(input.substring(10)).ifPresent(handler -> {
                     System.out.println(handler.toString());
                     ren.render(handler);
+                    this.handler = handler;
                 });
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("mark")) {
@@ -46,6 +48,10 @@ class Interactive {
         } else {
             System.out.println("Command not found");
         }
+    }
+
+    NodeHandler getHandler() {
+        return handler;
     }
 
 }
