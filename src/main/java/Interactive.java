@@ -5,6 +5,8 @@ import java.util.Scanner;
 class Interactive {
 
     private Renderer<Integer> ren = new Renderer<>();
+    private NodeHandler handler = new NodeHandler();
+    private FileSyncer syncer = new FileSyncer(Type.INTEGER);
 
     void interpretCommand() {
         System.out.println("Type your command");
@@ -18,6 +20,10 @@ class Interactive {
                 NodeHandler.handlerFromFile(input.substring(10)).ifPresent(handler -> {
                     System.out.println(handler.toString());
                     ren.render(handler);
+                    this.handler = handler;
+                    if(!input.contains("config")) {
+                        syncer.setFileName(input.substring(10, input.length() - 5) + "-config");
+                    }
                 });
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("mark")) {
@@ -32,6 +38,9 @@ class Interactive {
             } else {
                 ren.addNode(input.substring(9));
             }
+            FileSyncer syncer = new FileSyncer(Type.INTEGER);
+            syncer.handlerToFile(handler);
+            
         }else if(input.length() > 7 && input.substring(0, 8).equals("add edge")) {
             if (input.length() == 8) {
                 System.out.println("Please specify names");
@@ -39,6 +48,8 @@ class Interactive {
                 String[] names = input.substring(9).split(" ");
                 try {
                     ren.addEdge(names[0], names[1], names[2]);
+                    handler.connect(names[0], names[1], names[2]);
+                    syncer.handlerToFile(handler);
                 } catch(IndexOutOfBoundsException ex) {
                     System.out.println("Wrong number of argument supplied");
                 }
@@ -46,6 +57,10 @@ class Interactive {
         } else {
             System.out.println("Command not found");
         }
+    }
+
+    public NodeHandler getHandler() {
+        return handler;
     }
 
 }
