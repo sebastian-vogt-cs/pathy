@@ -13,7 +13,7 @@ public class FileSyncer {
 
     FileSyncer(Type type) {
         this.type = type;
-        fileName = "new-config";
+        fileName = "new-config.json";
     }
 
     public Type getType() {
@@ -23,22 +23,21 @@ public class FileSyncer {
     void setFileName(String fileName) {
         this.fileName = fileName;
         try {
-            createFile(fileName);
+            createFile();
         } catch(Exception ex) {
             System.out.print("Unhandled exception in FileSyncer contructor" + ex.getMessage());
         }
     }
 
-    private void createFile(String name) throws IOException {
-        File file = new File(name + ".json");
-        fileName = name + ".json";
+    private void createFile() throws IOException {
+        File file = new File(fileName + ".json");
         if(!file.createNewFile()){
-               createFile(name, 1);
+               createFile(fileName, 1);
         }
     }
     private void createFile(String name, int num) throws IOException {
         File file = new File(name + "(" + num + ")" + ".json");
-        fileName = name + "(" + num + ")" + ".json";
+        fileName = name + "(" + num + ")";
         if(!file.createNewFile()){
             createFile(name, ++num);
         }
@@ -88,14 +87,14 @@ public class FileSyncer {
     private void writeln(String text) throws IOException {
         ArrayList<String> list = new ArrayList<String>();
         list.add(text);
-        Files.write(Paths.get(fileName), list, StandardCharsets.UTF_8,
+        Files.write(Paths.get(fileName + ".json"), list, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
     void handlerToFile(NodeHandler handler) {
         try {
-            Files.deleteIfExists(Paths.get(fileName));
-            createFile(fileName);
+            Files.deleteIfExists(Paths.get(fileName + ".json"));
+            createFile();
             startFile();
             int i = 0;
             for(Object nd: handler.getNodes()) {
