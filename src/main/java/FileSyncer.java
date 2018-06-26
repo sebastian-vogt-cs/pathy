@@ -13,7 +13,7 @@ public class FileSyncer {
 
     FileSyncer(Type type) {
         this.type = type;
-        fileName = "new-config.json";
+        fileName = "new-config";
     }
 
     public Type getType() {
@@ -31,16 +31,6 @@ public class FileSyncer {
 
     private void createFile() throws IOException {
         File file = new File(fileName + ".json");
-        if(!file.createNewFile()){
-               createFile(fileName, 1);
-        }
-    }
-    private void createFile(String name, int num) throws IOException {
-        File file = new File(name + "(" + num + ")" + ".json");
-        fileName = name + "(" + num + ")";
-        if(!file.createNewFile()){
-            createFile(name, ++num);
-        }
     }
 
     private void startFile() throws IOException {
