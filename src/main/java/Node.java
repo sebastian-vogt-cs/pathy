@@ -1,10 +1,16 @@
 import java.util.HashMap;
+import java.util.Optional;
 
 class Node<T> {
 
     // each node has a name and all the nodes it's connected to
     private String name;
     private HashMap<Node<T>, T> edges = new HashMap<>();
+    private Optional<T> distance;
+    private boolean visited;
+
+
+    private Node<T> predecessor;
 
     Node(String name) {
         this.name = name;
@@ -12,6 +18,14 @@ class Node<T> {
 
     String getName() {
         return name;
+    }
+
+    Node<T> getPredecessor() {
+        return predecessor;
+    }
+
+    Optional<T> getDistance() {
+        return distance;
     }
 
     HashMap<Node<T>, T> getEdges() {

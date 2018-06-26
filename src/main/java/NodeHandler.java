@@ -44,6 +44,14 @@ public class NodeHandler<T> {
         return null;
     }
 
+    Node<T> getPredecessorByName(String name) {
+        return getNodeByName(name).getPredecessor();
+    }
+
+    Optional<T> getDistanceByName(String name) {
+        return getNodeByName(name).getDistance();
+    }
+
     public String toString() {
         StringBuilder ret = new StringBuilder();
         for(Node<T> n : nodes) {
