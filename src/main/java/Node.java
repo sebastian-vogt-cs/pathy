@@ -33,11 +33,11 @@ class Node<T> {
     }
 
     // if you want to connect a specified node with a specified edge length...
-    void connect_node(Node<T> node, T length) throws IllegalEdgeException {
+    void connect_node(Node<T> node, T length) {
         // ...it first looks for already connected nodes with the same name and throws an exception if it exists...
             for (Node key : edges.keySet()) {
                 if (key.getName().equals(node.getName())) {
-                    throw new IllegalEdgeException("You cannot define an edge twice!");
+                    return;
                 }
             }
         // ...pushes the new node to the edges Hash...
@@ -47,10 +47,10 @@ class Node<T> {
     }
 
     // connect_node method, but without calling it on the other node again, the other node already has the edge.
-    private void connect_node_back(Node<T> node, T length) throws IllegalEdgeException {
+    private void connect_node_back(Node<T> node, T length) {
             for (Node key : edges.keySet()) {
                 if (key.getName().equals(node.getName())) {
-                    throw new IllegalEdgeException("You cannot define an edge twice!");
+                    return;
                 }
             }
         edges.put(node, length);

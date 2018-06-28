@@ -13,7 +13,7 @@ public class NodeHandler<T> {
         return nodes;
     }
 
-    void connect(String name1, String name2, T len) throws IllegalEdgeException {
+    void connect(String name1, String name2, T len) {
         Node<T> node1 = getNodeByName(name1);
         Node<T> node2 = getNodeByName(name2);
         if (node1 == null && node2 == null) {

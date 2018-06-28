@@ -15,7 +15,7 @@ class Json {
 
     // this is an example of how the program could use data from a json file to create nodes. At the moment it merely
     // tells you which nodes and edges you have specified in example.json
-    static NodeHandler readJson(String filename) throws ParseException, IOException, IllegalEdgeException {
+    static NodeHandler readJson(String filename) throws ParseException, IOException {
         NodeHandler returnHandler = new NodeHandler();
 
         JSONParser parser = new JSONParser();
