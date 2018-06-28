@@ -6,11 +6,11 @@ class Node<T> {
     // each node has a name and all the nodes it's connected to
     private String name;
     private HashMap<Node<T>, T> edges = new HashMap<>();
-    private Optional<T> distance;
+
+    private Optional<T> distance = Optional.empty();
     private boolean visited;
-
-
     private Node<T> predecessor;
+
 
     Node(String name) {
         this.name = name;
@@ -26,6 +26,10 @@ class Node<T> {
 
     Optional<T> getDistance() {
         return distance;
+    }
+
+    void setDistance(Optional<T> distance) {
+        this.distance = distance;
     }
 
     HashMap<Node<T>, T> getEdges() {

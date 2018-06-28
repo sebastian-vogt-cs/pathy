@@ -35,7 +35,7 @@ public class NodeHandler<T> {
         }
     }
 
-    private Node<T> getNodeByName(String name) {
+    Node<T> getNodeByName(String name) {
         for(Node<T> node : nodes) {
             if(node.getName().equals(name)) {
                 return node;
