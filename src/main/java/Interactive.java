@@ -23,6 +23,8 @@ class Interactive {
                     this.handler = handler;
                     if(!input.contains("config")) {
                         syncer.setFileName(input.substring(10, input.length() - 5) + "-config");
+                    } else {
+                        syncer.setFileName(input.substring(10, input.length() - 5));
                     }
                 });
             }
