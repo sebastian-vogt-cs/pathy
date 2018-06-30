@@ -1,7 +1,6 @@
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.Vector;
 
 public class NodeHandler<T> {
@@ -66,9 +65,9 @@ public class NodeHandler<T> {
         return ret.toString();
     }
 
-    static Optional<NodeHandler> handlerFromFile(String input){
+    static Optional<Json> handlerFromFile(String input){
         try {
-            return Optional.of(Json.readJson(input));
+            return Optional.of(new Json(input));
         } catch(ClassCastException ex) {
             System.out.println("Error: Wrong data type supplied");
             return Optional.empty();

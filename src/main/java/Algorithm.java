@@ -1,3 +1,6 @@
+/* I commented it out so the program will compile
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -33,3 +36,4 @@ public class Algorithm<T> {
         }
     }
 }
+*/

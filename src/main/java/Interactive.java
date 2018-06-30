@@ -1,11 +1,12 @@
-import java.io.FileNotFoundException;
 import java.util.Optional;
 import java.util.Scanner;
 
 class Interactive {
 
-    private Renderer<Integer> ren = new Renderer<>();
-    private NodeHandler handler = new NodeHandler();
+    private Renderer ren = new Renderer<>();
+    private Optional<NodeHandler<Integer>> handI;
+    private Optional<NodeHandler<Double>> handD;
+    private Optional<NodeHandler<Long>> handL;
     private FileSyncer syncer = new FileSyncer(Type.INTEGER);
 
     void interpretCommand() {
@@ -17,10 +18,22 @@ class Interactive {
             if (input.length() == 9) {
                 System.out.println("Please specify file");
             } else {
-                NodeHandler.handlerFromFile(input.substring(10)).ifPresent(handler -> {
-                    System.out.println(handler.toString());
-                    ren.render(handler);
-                    this.handler = handler;
+                NodeHandler.handlerFromFile(input.substring(10)).ifPresent(json -> {
+                    handI = json.getHandI();
+                    handD = json.getHandD();
+                    handL = json.getHandL();
+                    handI.ifPresent(handler -> {
+                        System.out.println(handler.toString());
+                        ren.render(handler);
+                    });
+                    handD.ifPresent(handler -> {
+                        System.out.println(handler.toString());
+                        ren.render(handler);
+                    });
+                    handL.ifPresent(handler -> {
+                        System.out.println(handler.toString());
+                        ren.render(handler);
+                    });
                     if(!input.contains("config")) {
                         syncer.setFileName(input.substring(10, input.length() - 5) + "-config");
                     } else {
@@ -34,24 +47,29 @@ class Interactive {
             } else if (!ren.mark(input.substring(5))) {
                 System.out.println("Node not found");
             }
-        } else if(input.length() > 7 && input.substring(0, 8).equals("add node")) {
-            if (input.length() == 8) {
-                System.out.println("Please specify name");
-            } else {
-                ren.addNode(input.substring(9));
-            }
-            FileSyncer syncer = new FileSyncer(Type.INTEGER);
-            syncer.handlerToFile(handler);
-            
-        }else if(input.length() > 7 && input.substring(0, 8).equals("add edge")) {
+        } else if(input.length() > 7 && input.substring(0, 8).equals("add edge")) {
             if (input.length() == 8) {
                 System.out.println("Please specify names");
             } else {
                 String[] names = input.substring(9).split(" ");
                 try {
-                    ren.addEdge(names[0], names[1], names[2]);
-                    handler.connect(names[0], names[1], names[2]);
-                    syncer.handlerToFile(handler);
+                    try {
+                        handI.ifPresent(handler -> {
+                            handler.connect(names[0], names[1], Integer.parseInt(names[2]));
+                            syncer.handlerToFile(handler);
+                        });
+                        handD.ifPresent(handler -> {
+                            handler.connect(names[0], names[1], Double.parseDouble(names[2]));
+                            syncer.handlerToFile(handler);
+                        });
+                        handL.ifPresent(handler -> {
+                            handler.connect(names[0], names[1], Long.parseLong(names[2]));
+                            syncer.handlerToFile(handler);
+                        });
+                        ren.addEdge(names[0], names[1], names[2]);
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Wrong data type supplied");
+                    }
                 } catch(IndexOutOfBoundsException ex) {
                     System.out.println("Wrong number of argument supplied");
                 }
@@ -59,10 +77,6 @@ class Interactive {
         } else {
             System.out.println("Command not found");
         }
-    }
-
-    public NodeHandler getHandler() {
-        return handler;
     }
 
 }
