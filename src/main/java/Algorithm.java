@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class Algorithm<T> {
+public class Algorithm<T extends Number> {
     ArrayList<Node<T>> openList;
     NodeHandler<T> nodeHandler;
 
@@ -28,8 +28,9 @@ public class Algorithm<T> {
                 if (here == startNode) {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
                 }
-                else{
-                    next.setDistance(Optional.of(here.getEdges().get(next) + here.getDistance().get()));
+                else {
+                    Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
+                    Optional<T> oldDistance = next.getDistance();
 
                 }
             }

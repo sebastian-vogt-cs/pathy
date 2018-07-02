@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.Vector;
 
-public class NodeHandler<T> {
+public class NodeHandler<T extends Number> {
 
     // this vector stores all the nodes
     private Vector<Node<T>> nodes = new Vector<>();

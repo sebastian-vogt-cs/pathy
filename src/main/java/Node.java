@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Optional;
 
-class Node<T> {
+class Node<T extends Number> {
 
     // each node has a name and all the nodes it's connected to
     private String name;
