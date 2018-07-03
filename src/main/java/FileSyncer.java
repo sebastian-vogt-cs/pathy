@@ -20,6 +20,10 @@ public class FileSyncer {
         return type;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     void setFileName(String fileName) {
         this.fileName = fileName;
         try {

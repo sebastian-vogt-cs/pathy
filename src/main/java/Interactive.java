@@ -4,9 +4,9 @@ import java.util.Scanner;
 class Interactive {
 
     private Renderer ren = new Renderer<>();
-    private Optional<NodeHandler<Integer>> handI;
-    private Optional<NodeHandler<Double>> handD;
-    private Optional<NodeHandler<Long>> handL;
+    private Optional<NodeHandler<Integer>> handI = Optional.empty();
+    private Optional<NodeHandler<Double>> handD = Optional.empty();
+    private Optional<NodeHandler<Long>> handL = Optional.empty();
     private FileSyncer syncer = new FileSyncer(Type.INTEGER);
 
     void interpretCommand() {
@@ -23,14 +23,17 @@ class Interactive {
                     handD = json.getHandD();
                     handL = json.getHandL();
                     handI.ifPresent(handler -> {
+                        syncer.setType(Type.INTEGER);
                         System.out.println(handler.toString());
                         ren.render(handler);
                     });
                     handD.ifPresent(handler -> {
+                        syncer.setType(Type.DOUBLE);
                         System.out.println(handler.toString());
                         ren.render(handler);
                     });
                     handL.ifPresent(handler -> {
+                        syncer.setType(Type.LONG);
                         System.out.println(handler.toString());
                         ren.render(handler);
                     });
@@ -44,7 +47,7 @@ class Interactive {
         } else if(input.length() > 3 && input.substring(0, 4).equals("mark")) {
             if (input.length() == 4) {
                 System.out.println("Please specify node");
-            } else if (!ren.mark(input.substring(5))) {
+            } else if(!ren.mark(input.substring(5))) {
                 System.out.println("Node not found");
             }
         } else if(input.length() > 7 && input.substring(0, 8).equals("add edge")) {
