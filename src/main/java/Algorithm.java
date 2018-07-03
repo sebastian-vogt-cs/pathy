@@ -20,19 +20,23 @@ public class Algorithm<T extends Number> {
     }
 
     void walk(Node<T> here){
+        here.setVisited(true);
         if (here != endNode) {
             for (Node<T> next : here.getEdges().keySet()) {
                 if (here == startNode) {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
-                }
-                else {
+                } else if (!next.equals(here.getPredecessor())){
                     try {
                         Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
+                        Optional<T> oldDistance = next.getDistance();
+
+                        if (!oldDistance.isPresent() || Type.lessThan(newDistance.get(), oldDistance.get())) {
+                            next.setDistance(newDistance);
+                            next.setPredecessor(here);
+                        }
                     } catch (TypeMismatchException e) {
                         e.printStackTrace();
                     }
-                    Optional<T> oldDistance = next.getDistance();
-
                 }
             }
         }

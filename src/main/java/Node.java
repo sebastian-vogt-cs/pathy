@@ -8,9 +8,10 @@ class Node<T extends Number> {
     private HashMap<Node<T>, T> edges = new HashMap<>();
 
     private Optional<T> distance = Optional.empty();
-    private boolean visited;
-    private Node<T> predecessor;
 
+    private boolean visited = false;
+
+    private Node<T> predecessor;
 
     Node(String name) {
         this.name = name;
@@ -24,12 +25,25 @@ class Node<T extends Number> {
         return predecessor;
     }
 
+
     Optional<T> getDistance() {
         return distance;
     }
 
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setPredecessor(Node<T> predecessor) {
+        this.predecessor = predecessor;
+    }
+
     void setDistance(Optional<T> distance) {
         this.distance = distance;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 
     HashMap<Node<T>, T> getEdges() {

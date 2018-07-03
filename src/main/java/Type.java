@@ -37,4 +37,8 @@ public enum Type {
             throw new TypeMismatchException();
         }
     }
+
+    static <T extends Number> boolean lessThan(T one, T two) throws TypeMismatchException {
+        return greaterThan(two, one);
+    }
 }
