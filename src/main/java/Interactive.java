@@ -8,6 +8,11 @@ class Interactive {
     private Optional<NodeHandler<Double>> handD = Optional.empty();
     private Optional<NodeHandler<Long>> handL = Optional.empty();
     private FileSyncer syncer = new FileSyncer(Type.INTEGER);
+    private boolean exit = false;
+
+    boolean exit() {
+        return exit;
+    }
 
     void interpretCommand() {
         System.out.println("Type your command");
@@ -75,6 +80,18 @@ class Interactive {
                     }
                 } catch(IndexOutOfBoundsException ex) {
                     System.out.println("Wrong number of argument supplied");
+                }
+            }
+        } else if(input.length() > 3 && input.substring(0, 4).equals("exit")) {
+            exit = true;
+        } else if(input.length() > 9 && input.substring(0, 10).equals("stylesheet")) {
+            if (input.length() == 10) {
+                System.out.println("Please specify file name");
+            } else {
+                try {
+                    ren.setStyleSheet(input.substring(11));
+                } catch(Exception ex) {
+                    System.out.println("File does not exist");
                 }
             }
         } else {

@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
-public class FileSyncer {
+class FileSyncer {
 
     private Type type;
     private String fileName;
@@ -16,11 +16,7 @@ public class FileSyncer {
         fileName = "new-config";
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
+    void setType(Type type) {
         this.type = type;
     }
 
@@ -33,8 +29,8 @@ public class FileSyncer {
         }
     }
 
-    private void createFile() throws IOException {
-        File file = new File(fileName + ".json");
+    private void createFile() {
+        new File(fileName + ".json");
     }
 
     private void startFile() throws IOException {
@@ -79,7 +75,7 @@ public class FileSyncer {
     }
 
     private void writeln(String text) throws IOException {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add(text);
         Files.write(Paths.get(fileName + ".json"), list, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);

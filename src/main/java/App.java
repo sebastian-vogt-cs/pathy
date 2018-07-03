@@ -3,10 +3,10 @@ public class App {
         new App().mainLoop();
     }
 
-    Interactive interactive = new Interactive();
+    private Interactive interactive = new Interactive();
 
     private void mainLoop() {
-        while(true) {
+        while(!interactive.exit()) {
             interactive.interpretCommand();
         }
     }

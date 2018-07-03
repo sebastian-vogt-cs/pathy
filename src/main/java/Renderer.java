@@ -1,7 +1,12 @@
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+
 
 class Renderer<T extends Number> {
 
@@ -24,10 +29,12 @@ class Renderer<T extends Number> {
     void render(NodeHandler handler) {
 
         for(Object nd : handler.getNodes()){
+            @SuppressWarnings("unchecked")
             Node<T> node = (Node) nd;
             graph.addNode(node.getName());
             HashMap<Node<T>, T> edges = node.getEdges();
             for(Object ed : edges.keySet()) {
+                @SuppressWarnings("unchecked")
                 Node<T> node2 = (Node) ed;
                 T len = edges.get(ed);
                 if(node.getName().compareTo(node2.getName()) < 0) {
@@ -58,6 +65,12 @@ class Renderer<T extends Number> {
         graph.getEdge(name + name2).addAttribute("ui.label", len);
         graph.getNode(name).addAttribute("ui.label", name);
         graph.getNode(name2).addAttribute("ui.label", name2);
+    }
+
+    void setStyleSheet(String filename) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(filename));
+        styleSheet = new String(encoded, Charset.forName("UTF-8"));
+        graph.changeAttribute("ui.stylesheet", styleSheet);
     }
 
 }
