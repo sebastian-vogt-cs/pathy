@@ -3,7 +3,7 @@ import org.graphstream.graph.implementations.*;
 
 import java.util.HashMap;
 
-class Renderer<T> {
+class Renderer<T extends Number> {
 
     private String styleSheet =
             "node {" +
