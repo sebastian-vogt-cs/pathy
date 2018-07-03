@@ -1,6 +1,3 @@
-/* I commented it out so the program will compile
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -29,7 +26,11 @@ public class Algorithm<T extends Number> {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
                 }
                 else {
-                    Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
+                    try {
+                        Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
+                    } catch (TypeMismatchException e) {
+                        e.printStackTrace();
+                    }
                     Optional<T> oldDistance = next.getDistance();
 
                 }
@@ -37,4 +38,3 @@ public class Algorithm<T extends Number> {
         }
     }
 }
-*/
