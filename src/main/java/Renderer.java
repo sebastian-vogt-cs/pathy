@@ -51,6 +51,10 @@ class Renderer<T extends Number> {
         graph.display();
     }
 
+    void renderBlank() {
+        graph.display();
+    }
+
     boolean mark(String name) {
         try{
             graph.getNode(name).addAttribute("ui.class", "marked");

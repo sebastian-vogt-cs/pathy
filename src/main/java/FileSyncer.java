@@ -81,25 +81,21 @@ class FileSyncer {
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND);
     }
 
-    void handlerToFile(NodeHandler handler) {
-        try {
-            Files.deleteIfExists(Paths.get(fileName + ".json"));
-            createFile();
-            startFile();
-            int i = 0;
-            for(Object nd: handler.getNodes()) {
-                i++;
-                Node n = (Node) nd;
-                if(i == handler.getNodes().size()) {
-                    write(n);
-                } else {
-                    write(n, true);
-                }
+    void handlerToFile(NodeHandler handler) throws IOException {
+        Files.deleteIfExists(Paths.get(fileName + ".json"));
+        createFile();
+        startFile();
+        int i = 0;
+        for(Object nd: handler.getNodes()) {
+            i++;
+            Node n = (Node) nd;
+            if(i == handler.getNodes().size()) {
+                write(n);
+            } else {
+                write(n, true);
             }
-            endFile();
-        }catch(Exception ex) {
-            System.out.println("shit");
         }
+        endFile();
     }
 
 

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -60,26 +61,44 @@ class Interactive {
                 System.out.println("Please specify names");
             } else {
                 String[] names = input.substring(9).split(" ");
-                try {
+                if (names.length != 3) {
+                    System.out.println("Please specify exactly three parameters");
+                } else {
                     try {
-                        handI.ifPresent(handler -> {
-                            handler.connect(names[0], names[1], Integer.parseInt(names[2]));
-                            syncer.handlerToFile(handler);
-                        });
-                        handD.ifPresent(handler -> {
-                            handler.connect(names[0], names[1], Double.parseDouble(names[2]));
-                            syncer.handlerToFile(handler);
-                        });
-                        handL.ifPresent(handler -> {
-                            handler.connect(names[0], names[1], Long.parseLong(names[2]));
-                            syncer.handlerToFile(handler);
-                        });
-                        ren.addEdge(names[0], names[1], names[2]);
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Wrong data type supplied");
+                        try {
+                            handI.ifPresent(handler -> {
+                                handler.connect(names[0], names[1], Integer.parseInt(names[2]));
+                                try {
+                                    syncer.handlerToFile(handler);
+                                } catch (IOException ex) {
+                                    System.out.println("An error occurred writing to the file");
+                                }
+                                ren.addEdge(names[0], names[1], names[2]);
+                            });
+                            handD.ifPresent(handler -> {
+                                handler.connect(names[0], names[1], Double.parseDouble(names[2]));
+                                try {
+                                    syncer.handlerToFile(handler);
+                                } catch (IOException ex) {
+                                    System.out.println("An error occurred writing to the file");
+                                }
+                                ren.addEdge(names[0], names[1], names[2]);
+                            });
+                            handL.ifPresent(handler -> {
+                                handler.connect(names[0], names[1], Long.parseLong(names[2]));
+                                try {
+                                    syncer.handlerToFile(handler);
+                                } catch (IOException ex) {
+                                    System.out.println("An error occurred writing to the file");
+                                }
+                                ren.addEdge(names[0], names[1], names[2]);
+                            });
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Wrong data type supplied");
+                        }
+                    } catch (IndexOutOfBoundsException ex) {
+                        System.out.println("Wrong number of argument supplied");
                     }
-                } catch(IndexOutOfBoundsException ex) {
-                    System.out.println("Wrong number of argument supplied");
                 }
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("exit")) {
@@ -94,9 +113,55 @@ class Interactive {
                     System.out.println("File does not exist");
                 }
             }
+        } else if(input.length() > 2 && input.substring(0, 3).equals("new")) {
+            if(input.length() == 3) {
+                System.out.println("Please specify type and file name");
+            } else {
+                String[] arguments = input.substring(4).split(" ");
+                if (arguments.length != 2) {
+                    System.out.println("Please specify exactly three parameters");
+                } else if(arguments[0].equals("Integer")) {
+                    if(!input.contains("config")) {
+                        syncer.setFileName(arguments[1] + "-config");
+                    } else {
+                        syncer.setFileName(arguments[1]);
+                    }
+                    handI = Optional.of(new NodeHandler<>());
+                    syncer.setType(Type.INTEGER);
+                    ren.renderBlank();
+                } else if(arguments[0].equals("Double")) {
+                    if(!input.contains("config")) {
+                        syncer.setFileName(arguments[1] + "-config");
+                    } else {
+                        syncer.setFileName(arguments[1]);
+                    }
+                    handD = Optional.of(new NodeHandler<>());
+                    syncer.setType(Type.DOUBLE);
+                    ren.renderBlank();;
+                } else if(arguments[0].equals("Long")) {
+                    if(!input.contains("config")) {
+                        syncer.setFileName(arguments[1] + "-config");
+                    } else {
+                        syncer.setFileName(arguments[1]);
+                    }
+                    handL = Optional.of(new NodeHandler<>());
+                    syncer.setType(Type.LONG);
+                    ren.renderBlank();
+                }
+            }
         } else {
             System.out.println("Command not found");
         }
+    }
+
+    private void addEdgeHelper(NodeHandler handler, String[] names) {
+        handler.connect(names[0], names[1], Integer.parseInt(names[2]));
+        try {
+            syncer.handlerToFile(handler);
+        } catch (IOException ex) {
+            System.out.println("An error occurred writing to the file");
+        }
+        ren.addEdge(names[0], names[1], names[2]);
     }
 
 }
