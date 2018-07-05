@@ -29,6 +29,10 @@ class FileSyncer {
         }
     }
 
+    String getFileName() {
+        return fileName;
+    }
+
     private void createFile() {
         new File(fileName + ".json");
     }
@@ -82,8 +86,7 @@ class FileSyncer {
     }
 
     void handlerToFile(NodeHandler handler) throws IOException {
-        Files.deleteIfExists(Paths.get(fileName + ".json"));
-        createFile();
+        resetFile();
         startFile();
         int i = 0;
         for(Object nd: handler.getNodes()) {
@@ -96,6 +99,11 @@ class FileSyncer {
             }
         }
         endFile();
+    }
+
+    void resetFile() throws IOException {
+        Files.deleteIfExists(Paths.get(fileName + ".json"));
+        createFile();
     }
 
 

@@ -66,6 +66,7 @@ public class NodeHandler<T extends Number> {
     }
 
     static Optional<Json> handlerFromFile(String input){
+        input = input + ".json";
         try {
             return Optional.of(new Json(input));
         } catch(ClassCastException ex) {

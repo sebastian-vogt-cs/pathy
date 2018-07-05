@@ -18,16 +18,19 @@ class Renderer<T extends Number> {
                     "	fill-color: red;" +
                     "}";
     private Graph graph;
+    private boolean isRendered;
 
     Renderer() {
         graph = new SingleGraph("graph");
         graph.setStrict(false);
         graph.setAutoCreate( true );
         graph.addAttribute("ui.stylesheet", styleSheet);
+        graph.display();
     }
 
     void render(NodeHandler handler) {
 
+        graph.clear();
         for(Object nd : handler.getNodes()){
             @SuppressWarnings("unchecked")
             Node<T> node = (Node) nd;
@@ -48,11 +51,10 @@ class Renderer<T extends Number> {
             }
         }
 
-        graph.display();
     }
 
     void renderBlank() {
-        graph.display();
+        graph.clear();
     }
 
     boolean mark(String name) {
@@ -69,6 +71,10 @@ class Renderer<T extends Number> {
         graph.getEdge(name + name2).addAttribute("ui.label", len);
         graph.getNode(name).addAttribute("ui.label", name);
         graph.getNode(name2).addAttribute("ui.label", name2);
+    }
+
+    void addFileName(String name) {
+        graph.addNode("fileName").addAttribute("ui.label", name);
     }
 
     void setStyleSheet(String filename) throws IOException {

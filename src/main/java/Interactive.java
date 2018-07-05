@@ -48,6 +48,7 @@ class Interactive {
                     } else {
                         syncer.setFileName(input.substring(10, input.length() - 5));
                     }
+                    ren.addFileName(syncer.getFileName());
                 });
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("mark")) {
@@ -93,6 +94,10 @@ class Interactive {
                                 }
                                 ren.addEdge(names[0], names[1], names[2]);
                             });
+                            if(! (handL.isPresent() || handI.isPresent() || handD.isPresent()) ) {
+                                System.out.println("Your changes will not be saved! To save your changes create a new file or read an existing file first (type 'help' for help)");
+                                ren.addEdge(names[0], names[1], names[2]);
+                            }
                         } catch (NumberFormatException ex) {
                             System.out.println("Wrong data type supplied");
                         }
@@ -128,6 +133,12 @@ class Interactive {
                     }
                     handI = Optional.of(new NodeHandler<>());
                     syncer.setType(Type.INTEGER);
+                    ren.addFileName(syncer.getFileName());
+                    try {
+                        syncer.resetFile();
+                    } catch(IOException ex) {
+                        System.out.println("An error occured creating the file");
+                    }
                     ren.renderBlank();
                 } else if(arguments[0].equals("Double")) {
                     if(!input.contains("config")) {
@@ -137,6 +148,12 @@ class Interactive {
                     }
                     handD = Optional.of(new NodeHandler<>());
                     syncer.setType(Type.DOUBLE);
+                    ren.addFileName(syncer.getFileName());
+                    try {
+                        syncer.resetFile();
+                    } catch(IOException ex) {
+                        System.out.println("An error occured creating the file");
+                    }
                     ren.renderBlank();;
                 } else if(arguments[0].equals("Long")) {
                     if(!input.contains("config")) {
@@ -146,6 +163,12 @@ class Interactive {
                     }
                     handL = Optional.of(new NodeHandler<>());
                     syncer.setType(Type.LONG);
+                    ren.addFileName(syncer.getFileName());
+                    try {
+                        syncer.resetFile();
+                    } catch(IOException ex) {
+                        System.out.println("An error occured creating the file");
+                    }
                     ren.renderBlank();
                 }
             }
