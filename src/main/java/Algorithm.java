@@ -1,44 +1,83 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class Algorithm<T extends Number> {
-    ArrayList<Node<T>> openList;
-    NodeHandler<T> nodeHandler;
+    ArrayList<Node<T>> path;
 
-    Node<T> startNode;
-    Node<T> endNode;
+    private ArrayList<Node<T>> openList;
+
+    private NodeHandler<T> nodeHandler;
+
+    private Node<T> startNode;
+    private Node<T> endNode;
 
     Algorithm(NodeHandler nodeHandler) {
         this.nodeHandler = nodeHandler;
     }
 
-    void run(Node<T> startNode, Node<T> endNode) {
+    ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) {
         this.startNode = startNode;
         this.endNode = endNode;
-        walk(startNode);
+        openList.add(startNode);
+
+        while (openList.size() > 0) {
+            walk(startNode);
+        }
+
+        if (endNode.getPredecessor() != null) {
+            // found endNode
+            storePath(endNode);
+            return path;
+        } else {
+            // no connection
+            return null;
+        }
     }
 
     void walk(Node<T> here){
         here.setVisited(true);
+        removeFromOpenList(here);
         if (here != endNode) {
             for (Node<T> next : here.getEdges().keySet()) {
                 if (here == startNode) {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
                 } else if (!next.equals(here.getPredecessor())){
-                    try {
-                        Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
-                        Optional<T> oldDistance = next.getDistance();
+                    Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
+                    Optional<T> oldDistance = next.getDistance();
 
-                        if (!oldDistance.isPresent() || Type.lessThan(newDistance.get(), oldDistance.get())) {
-                            next.setDistance(newDistance);
-                            next.setPredecessor(here);
-                        }
-                    } catch (TypeMismatchException e) {
-                        e.printStackTrace();
+                    if (!oldDistance.isPresent() || Type.lessThan(newDistance.get(), oldDistance.get())) {
+                        next.setDistance(newDistance);
+                        next.setPredecessor(here);
+                        openList.add(next);
                     }
                 }
             }
+            sortOpenList();
         }
+    }
+
+    private void addToOpenList(Node<T> n) {
+        if (!openList.contains(n)) {
+            openList.add(n);
+        }
+    }
+
+    private void removeFromOpenList(Node<T> n) {
+        openList.remove(n);
+    }
+
+    private void sortOpenList() {
+        Collections.sort(openList, new Comparator<Node<T>>() {
+            @Override
+            public int compare(Node<T> t1, Node<T> t2) {
+                return Type.compare(t1.getDistance().get(), t2.getDistance().get());
+            }
+        });
+    }
+
+    private void storePath(Node<T> n){
+        if (n != startNode) {
+            storePath(n.getPredecessor());
+        }
+        path.add(n);
     }
 }
