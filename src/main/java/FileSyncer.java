@@ -33,6 +33,10 @@ class FileSyncer {
         return fileName;
     }
 
+    boolean exists(String fileName) {
+        return Files.exists(Paths.get(fileName + ".json"));
+    }
+
     private void createFile() {
         new File(fileName + ".json");
     }

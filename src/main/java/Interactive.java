@@ -118,58 +118,30 @@ class Interactive {
                     System.out.println("File does not exist");
                 }
             }
-        } else if(input.length() > 2 && input.substring(0, 3).equals("new")) {
-            if(input.length() == 3) {
+        } else if(input.length() > 3 && input.substring(0, 4).equals("new ")) {
+            if(input.length() == 4) {
                 System.out.println("Please specify type and file name");
             } else {
                 String[] arguments = input.substring(4).split(" ");
                 if (arguments.length != 2) {
                     System.out.println("Please specify exactly three parameters");
-                } else if(arguments[0].equals("Integer")) {
-                    if(!input.contains("config")) {
-                        syncer.setFileName(arguments[1] + "-config");
+                } else {
+                    if((!arguments[1].contains("config") && syncer.exists(arguments[1] + "-config")) || (arguments[1].contains("config") && syncer.exists(arguments[1]))) {
+                        System.out.println("This action would overwrite an existing file, use 'unsafe-new' in order to overwrite it.'");
                     } else {
-                        syncer.setFileName(arguments[1]);
+                        newC(arguments);
                     }
-                    handI = Optional.of(new NodeHandler<>());
-                    syncer.setType(Type.INTEGER);
-                    ren.addFileName(syncer.getFileName());
-                    try {
-                        syncer.resetFile();
-                    } catch(IOException ex) {
-                        System.out.println("An error occured creating the file");
-                    }
-                    ren.renderBlank();
-                } else if(arguments[0].equals("Double")) {
-                    if(!input.contains("config")) {
-                        syncer.setFileName(arguments[1] + "-config");
-                    } else {
-                        syncer.setFileName(arguments[1]);
-                    }
-                    handD = Optional.of(new NodeHandler<>());
-                    syncer.setType(Type.DOUBLE);
-                    ren.addFileName(syncer.getFileName());
-                    try {
-                        syncer.resetFile();
-                    } catch(IOException ex) {
-                        System.out.println("An error occured creating the file");
-                    }
-                    ren.renderBlank();;
-                } else if(arguments[0].equals("Long")) {
-                    if(!input.contains("config")) {
-                        syncer.setFileName(arguments[1] + "-config");
-                    } else {
-                        syncer.setFileName(arguments[1]);
-                    }
-                    handL = Optional.of(new NodeHandler<>());
-                    syncer.setType(Type.LONG);
-                    ren.addFileName(syncer.getFileName());
-                    try {
-                        syncer.resetFile();
-                    } catch(IOException ex) {
-                        System.out.println("An error occured creating the file");
-                    }
-                    ren.renderBlank();
+                }
+            }
+        } else if(input.length() > 10 && input.substring(0, 11).equals("unsafe-new ")) {
+            if(input.length() == 11) {
+                System.out.println("Please specify type and file name");
+            } else {
+                String[] arguments = input.substring(11).split(" ");
+                if (arguments.length != 2) {
+                    System.out.println("Please specify exactly three parameters");
+                } else {
+                    newC(arguments);
                 }
             }
         } else {
@@ -177,14 +149,61 @@ class Interactive {
         }
     }
 
-    private void addEdgeHelper(NodeHandler handler, String[] names) {
-        handler.connect(names[0], names[1], Integer.parseInt(names[2]));
-        try {
-            syncer.handlerToFile(handler);
-        } catch (IOException ex) {
-            System.out.println("An error occurred writing to the file");
+    private void newC(String[] arguments) {
+        switch (arguments[0]) {
+            case "Integer":
+                if (!arguments[1].contains("config")) {
+                    syncer.setFileName(arguments[1] + "-config");
+                } else {
+                    syncer.setFileName(arguments[1]);
+                }
+                handI = Optional.of(new NodeHandler<>());
+                syncer.setType(Type.INTEGER);
+                ren.addFileName(syncer.getFileName());
+                try {
+                    syncer.resetFile();
+                } catch (IOException ex) {
+                    System.out.println("An error occurred creating the file");
+                }
+                ren.renderBlank();
+                break;
+            case "Double":
+                if (!arguments[1].contains("config")) {
+                    syncer.setFileName(arguments[1] + "-config");
+                } else {
+                    syncer.setFileName(arguments[1]);
+                }
+                handD = Optional.of(new NodeHandler<>());
+                syncer.setType(Type.DOUBLE);
+                ren.addFileName(syncer.getFileName());
+                try {
+                    syncer.resetFile();
+                } catch (IOException ex) {
+                    System.out.println("An error occurred creating the file");
+                }
+                ren.renderBlank();
+                break;
+            case "Long":
+                if (!arguments[1].contains("config")) {
+                    syncer.setFileName(arguments[1] + "-config");
+                } else {
+                    syncer.setFileName(arguments[1]);
+                }
+                handL = Optional.of(new NodeHandler<>());
+                syncer.setType(Type.LONG);
+                ren.addFileName(syncer.getFileName());
+                try {
+                    syncer.resetFile();
+                } catch (IOException ex) {
+                    System.out.println("An error occurred creating the file");
+                }
+                ren.renderBlank();
+                break;
+            default:
+                System.out.println("Wrong data type supplied");
+                break;
         }
-        ren.addEdge(names[0], names[1], names[2]);
+
     }
 
 }
