@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import static org.fusesource.jansi.Ansi.*;
+
 class Interactive {
 
     private Renderer ren = new Renderer<>();
@@ -16,13 +18,13 @@ class Interactive {
     }
 
     void interpretCommand() {
-        System.out.println("Type your command");
+        printText("Type your command");
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
 
         if(input.length() > 8 && input.substring(0, 9).equals("read file")) {
             if (input.length() == 9) {
-                System.out.println("Please specify file");
+                printFailure("Please specify file");
             } else {
                 NodeHandler.handlerFromFile(input.substring(10)).ifPresent(json -> {
                     handI = json.getHandI();
@@ -49,21 +51,24 @@ class Interactive {
                         syncer.setFileName(input.substring(10, input.length() - 5));
                     }
                     ren.addFileName(syncer.getFileName());
+                    printSuccess("File read");
                 });
             }
-        } else if(input.length() > 3 && input.substring(0, 4).equals("mark")) {
-            if (input.length() == 4) {
-                System.out.println("Please specify node");
+        } else if(input.length() > 4 && input.substring(0, 5).equals("mark ")) {
+            if (input.length() == 5) {
+                printFailure("Please specify node");
             } else if(!ren.mark(input.substring(5))) {
-                System.out.println("Node not found");
+                printFailure("Node not found");
+            } else {
+                printSuccess("Node marked");
             }
-        } else if(input.length() > 7 && input.substring(0, 8).equals("add edge")) {
-            if (input.length() == 8) {
-                System.out.println("Please specify names");
+        } else if(input.length() > 8 && input.substring(0, 9).equals("add edge ")) {
+            if (input.length() == 9) {
+                printFailure("Please specify names");
             } else {
                 String[] names = input.substring(9).split(" ");
                 if (names.length != 3) {
-                    System.out.println("Please specify exactly three parameters");
+                    printFailure("Please specify exactly three parameters");
                 } else {
                     try {
                         try {
@@ -71,8 +76,9 @@ class Interactive {
                                 handler.connect(names[0], names[1], Integer.parseInt(names[2]));
                                 try {
                                     syncer.handlerToFile(handler);
+                                    printSuccess("Edge added");
                                 } catch (IOException ex) {
-                                    System.out.println("An error occurred writing to the file");
+                                    printFailure("An error occurred writing to the file. Your changes won't be saved after this session");
                                 }
                                 ren.addEdge(names[0], names[1], names[2]);
                             });
@@ -80,8 +86,9 @@ class Interactive {
                                 handler.connect(names[0], names[1], Double.parseDouble(names[2]));
                                 try {
                                     syncer.handlerToFile(handler);
+                                    printSuccess("Edge added");
                                 } catch (IOException ex) {
-                                    System.out.println("An error occurred writing to the file");
+                                    printFailure("An error occurred writing to the file. Your changes won't be saved after this session");
                                 }
                                 ren.addEdge(names[0], names[1], names[2]);
                             });
@@ -89,45 +96,47 @@ class Interactive {
                                 handler.connect(names[0], names[1], Long.parseLong(names[2]));
                                 try {
                                     syncer.handlerToFile(handler);
+                                    printSuccess("Edge added");
                                 } catch (IOException ex) {
-                                    System.out.println("An error occurred writing to the file");
+                                    printFailure("An error occurred writing to the file. Your changes won't be saved after this session");
                                 }
                                 ren.addEdge(names[0], names[1], names[2]);
                             });
                             if(! (handL.isPresent() || handI.isPresent() || handD.isPresent()) ) {
-                                System.out.println("Your changes will not be saved! To save your changes create a new file or read an existing file first (type 'help' for help)");
+                                printFailure("Your changes will not be saved! To save your changes create a new file or read an existing file first (type 'help' for help)");
                                 ren.addEdge(names[0], names[1], names[2]);
                             }
                         } catch (NumberFormatException ex) {
-                            System.out.println("Wrong data type supplied");
+                            printFailure("Wrong data type supplied");
                         }
                     } catch (IndexOutOfBoundsException ex) {
-                        System.out.println("Wrong number of argument supplied");
+                        printFailure("Wrong number of argument supplied");
                     }
                 }
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("exit")) {
             exit = true;
-        } else if(input.length() > 9 && input.substring(0, 10).equals("stylesheet")) {
-            if (input.length() == 10) {
-                System.out.println("Please specify file name");
+        } else if(input.length() > 10 && input.substring(0, 11).equals("stylesheet ")) {
+            if (input.length() == 11) {
+                printFailure("Please specify file name");
             } else {
                 try {
                     ren.setStyleSheet(input.substring(11));
+                    printSuccess("Stylesheet applied");
                 } catch(Exception ex) {
-                    System.out.println("File does not exist");
+                    printFailure("File does not exist");
                 }
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("new ")) {
             if(input.length() == 4) {
-                System.out.println("Please specify type and file name");
+                printFailure("Please specify type and file name");
             } else {
                 String[] arguments = input.substring(4).split(" ");
                 if (arguments.length != 2) {
-                    System.out.println("Please specify exactly three parameters");
+                    printFailure("Please specify exactly three parameters");
                 } else {
                     if((!arguments[1].contains("config") && syncer.exists(arguments[1] + "-config")) || (arguments[1].contains("config") && syncer.exists(arguments[1]))) {
-                        System.out.println("This action would overwrite an existing file, use 'unsafe-new' in order to overwrite it.'");
+                        printFailure("This action would overwrite an existing file, use 'unsafe-new' in order to overwrite it.'");
                     } else {
                         newC(arguments);
                     }
@@ -135,17 +144,17 @@ class Interactive {
             }
         } else if(input.length() > 10 && input.substring(0, 11).equals("unsafe-new ")) {
             if(input.length() == 11) {
-                System.out.println("Please specify type and file name");
+                printFailure("Please specify type and file name");
             } else {
                 String[] arguments = input.substring(11).split(" ");
                 if (arguments.length != 2) {
-                    System.out.println("Please specify exactly three parameters");
+                    printFailure("Please specify exactly three parameters");
                 } else {
                     newC(arguments);
                 }
             }
         } else {
-            System.out.println("Command not found");
+            printFailure("Command not found");
         }
     }
 
@@ -162,8 +171,9 @@ class Interactive {
                 ren.addFileName(syncer.getFileName());
                 try {
                     syncer.resetFile();
+                    printSuccess("New project was created");
                 } catch (IOException ex) {
-                    System.out.println("An error occurred creating the file");
+                    printFailure("An error occurred creating the project");
                 }
                 ren.renderBlank();
                 break;
@@ -178,8 +188,9 @@ class Interactive {
                 ren.addFileName(syncer.getFileName());
                 try {
                     syncer.resetFile();
+                    printSuccess("New project was created");
                 } catch (IOException ex) {
-                    System.out.println("An error occurred creating the file");
+                    printFailure("An error occurred creating the project");
                 }
                 ren.renderBlank();
                 break;
@@ -194,16 +205,29 @@ class Interactive {
                 ren.addFileName(syncer.getFileName());
                 try {
                     syncer.resetFile();
+                    printSuccess("New project was created");
                 } catch (IOException ex) {
-                    System.out.println("An error occurred creating the file");
+                    printFailure("An error occurred creating the project");
                 }
                 ren.renderBlank();
                 break;
             default:
-                System.out.println("Wrong data type supplied");
+                printFailure("Wrong data type supplied");
                 break;
         }
 
+    }
+
+    private void printText(String output) {
+        System.out.println( ansi().eraseScreen().render("@|blue > " + output + "|@") );
+    }
+
+    private void printSuccess(String output) {
+        System.out.println( ansi().eraseScreen().render("@|green >> " + output + "|@") );
+    }
+
+    private void printFailure(String output) {
+        System.out.println( ansi().eraseScreen().render("@|red >> " + output + "|@") );
     }
 
 }
