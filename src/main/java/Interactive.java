@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
@@ -160,9 +161,9 @@ class Interactive {
                 if (arguments.length != 2) {
                     printFailure("Please specify exactly two parameters");
                 } else {
-                    handI.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
-                    handD.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
-                    handL.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handI.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handD.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handL.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
                 }
             }
         } else {
@@ -240,6 +241,17 @@ class Interactive {
 
     private void printFailure(String output) {
         System.out.println( ansi().eraseScreen().render("@|red >> " + output + "|@") );
+    }
+
+    private <T extends Number> void printPath(ArrayList<Node<T>> path) {
+        for (int i = path.size()-1; i >= 0; i--) {
+            System.out.print(path.get(i).getName());
+            if (i > 0) {
+                System.out.print(" -> ");
+            } else {
+                System.out.println();
+            }
+        }
     }
 
 }

@@ -26,10 +26,12 @@ public class Algorithm<T extends Number> {
 
         if (endNode.getPredecessor() != null) {
             // found endNode
+            path = new ArrayList<>();
             storePath(endNode);
             return path;
         } else {
             // no connection
+            System.out.println("DEBUG: endNode: " + endNode.getName());
             return null;
         }
     }
@@ -41,6 +43,7 @@ public class Algorithm<T extends Number> {
             for (Node<T> next : here.getEdges().keySet()) {
                 if (here == startNode) {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
+                    next.setPredecessor(here);
                 } else if (!next.equals(here.getPredecessor())){
                     Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
                     Optional<T> oldDistance = next.getDistance();
