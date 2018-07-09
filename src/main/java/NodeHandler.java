@@ -8,8 +8,14 @@ public class NodeHandler<T extends Number> {
     // this vector stores all the nodes
     private Vector<Node<T>> nodes = new Vector<>();
 
+    private Algorithm<T> algorithm = new Algorithm<>(this);
+
     Vector<Node<T>> getNodes() {
         return nodes;
+    }
+
+    Algorithm<T> getAlgorithm() {
+        return algorithm;
     }
 
     void connect(String name1, String name2, T len) {

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 import static org.fusesource.jansi.Ansi.*;
 
@@ -114,8 +115,6 @@ class Interactive {
                     }
                 }
             }
-        } else if(input.length() > 3 && input.substring(0, 4).equals("exit")) {
-            exit = true;
         } else if(input.length() > 10 && input.substring(0, 11).equals("stylesheet ")) {
             if (input.length() == 11) {
                 printFailure("Please specify file name");
@@ -148,9 +147,22 @@ class Interactive {
             } else {
                 String[] arguments = input.substring(11).split(" ");
                 if (arguments.length != 2) {
-                    printFailure("Please specify exactly three parameters");
+                    printFailure("Please specify exactly two parameters");
                 } else {
                     newC(arguments);
+                }
+            }
+        } else if(input.length() > 4 && input.substring(0, 5).equals("path ")) {
+            if(input.length() == 5) {
+                printFailure("Please specify start and end node");
+            } else {
+                String[] arguments = input.substring(5).split(" ");
+                if (arguments.length != 2) {
+                    printFailure("Please specify exactly two parameters");
+                } else {
+                    handI.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handD.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handL.ifPresent(handler -> System.out.println(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
                 }
             }
         } else {

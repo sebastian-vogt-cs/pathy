@@ -12,6 +12,7 @@ public class Algorithm<T extends Number> {
 
     Algorithm(NodeHandler nodeHandler) {
         this.nodeHandler = nodeHandler;
+        openList = new ArrayList<>();
     }
 
     ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) {
