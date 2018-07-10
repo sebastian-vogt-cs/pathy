@@ -76,16 +76,16 @@ public class NodeHandler<T extends Number> {
         try {
             return Optional.of(new Json(input));
         } catch(ClassCastException ex) {
-            System.out.println("Error: Wrong data type supplied");
+            Interactive.printFailure("Wrong data type supplied");
             return Optional.empty();
         } catch(NumberFormatException ex) {
-            System.out.println("Error: Number too large");
+            Interactive.printFailure("Number too large");
             return Optional.empty();
         } catch(FileNotFoundException ex) {
-            System.out.println("file not found");
+            Interactive.printFailure("file not found");
             return Optional.empty();
         } catch (Exception ex) {
-            System.out.println("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
+            Interactive.printFailure("Exception in json parser: " + ex.getMessage() + "; " + ex.toString());
             return Optional.empty();
         }
     }

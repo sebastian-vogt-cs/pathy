@@ -16,6 +16,9 @@ class Renderer<T extends Number> {
                     "}" +
                     "node.marked {" +
                     "	fill-color: red;" +
+                    "}" +
+                    "node.path {" +
+                    "	fill-color: yellow;" +
                     "}";
     private Graph graph;
     private boolean isRendered;
@@ -24,13 +27,13 @@ class Renderer<T extends Number> {
         graph = new SingleGraph("graph");
         graph.setStrict(false);
         graph.setAutoCreate( true );
-        graph.addAttribute("ui.stylesheet", styleSheet);
         graph.display();
     }
 
     void render(NodeHandler handler) {
 
         graph.clear();
+        graph.addAttribute("ui.stylesheet", styleSheet);
         for(Object nd : handler.getNodes()){
             @SuppressWarnings("unchecked")
             Node<T> node = (Node) nd;
@@ -60,6 +63,15 @@ class Renderer<T extends Number> {
     boolean mark(String name) {
         try{
             graph.getNode(name).addAttribute("ui.class", "marked");
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
+    boolean markEdge(String name) {
+        try{
+            graph.getNode(name).addAttribute("ui.class", "path");
             return true;
         } catch (Exception ex) {
             return false;

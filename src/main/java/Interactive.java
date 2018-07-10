@@ -161,11 +161,35 @@ class Interactive {
                 if (arguments.length != 2) {
                     printFailure("Please specify exactly two parameters");
                 } else {
-                    handI.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
-                    handD.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
-                    handL.ifPresent(handler -> printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]))));
+                    handI.ifPresent(handler -> {
+                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+                    });
+                    handD.ifPresent(handler -> {
+                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+
+                    });
+                    handL.ifPresent(handler -> {
+                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+
+                    });
                 }
             }
+        } else if(input.length() > 3 && input.substring(0, 4).equals("help")) {
+            printText(
+                    "List of all commands:\n"
+                    + "* with 'read file [filename]' you can read a pathy config-file or a self defined .json (for reference see GitHub repo)\n"
+                    + "* with 'mark [node]' you can visually mark a node in the graph\n"
+                    + "* with 'add edge [node1] [node2] [length]' you can add an edge. It will be rendered and written to a config file if possible\n"
+                    + "* with 'stylesheet [filename]' you can add a custom stylesheet for the renderer. For reference see GitHub repo\n"
+                    + "* with 'new [Type] [filename]' you can initiate a new project with the given type and filename\n"
+                    + "* 'unsafe-new' works like 'new', but it overwrites existing files\n"
+                    + "* with 'path [node1] [node2]' you can get the shortest path between two nodes\n"
+                    + "* with 'help' you can print a list of all commands, but you figured that out already"
+
+            );
         } else {
             printFailure("Command not found");
         }
@@ -231,26 +255,33 @@ class Interactive {
 
     }
 
-    private void printText(String output) {
+    static void printText(String output) {
         System.out.println( ansi().eraseScreen().render("@|blue > " + output + "|@") );
     }
 
-    private void printSuccess(String output) {
+    static void printSuccess(String output) {
         System.out.println( ansi().eraseScreen().render("@|green >> " + output + "|@") );
     }
 
-    private void printFailure(String output) {
+    static void printFailure(String output) {
         System.out.println( ansi().eraseScreen().render("@|red >> " + output + "|@") );
     }
 
     private <T extends Number> void printPath(ArrayList<Node<T>> path) {
-        for (int i = path.size()-1; i >= 0; i--) {
+        for (int i = 0; i < path.size(); i++) {
             System.out.print(path.get(i).getName());
-            if (i > 0) {
+            if (i < path.size() - 1) {
                 System.out.print(" -> ");
             } else {
                 System.out.println();
             }
+        }
+        // TODO printSuccess, distance
+    }
+
+    private <T extends Number> void markPath(ArrayList<Node<T>> path) {
+        for (Node<T> aPath : path) {
+            ren.markEdge(aPath.getName());
         }
     }
 

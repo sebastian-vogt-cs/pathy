@@ -21,7 +21,7 @@ public class Algorithm<T extends Number> {
         openList.add(startNode);
 
         while (openList.size() > 0) {
-            walk(startNode);
+            walk(openList.get(0));
         }
 
         if (endNode.getPredecessor() != null) {
@@ -44,6 +44,7 @@ public class Algorithm<T extends Number> {
                 if (here == startNode) {
                     next.setDistance(Optional.of(here.getEdges().get(next)));
                     next.setPredecessor(here);
+                    openList.add(next);
                 } else if (!next.equals(here.getPredecessor())){
                     Optional<T> newDistance = Optional.of(Type.add(here.getEdges().get(next), here.getDistance().get()));
                     Optional<T> oldDistance = next.getDistance();
@@ -56,6 +57,8 @@ public class Algorithm<T extends Number> {
                 }
             }
             sortOpenList();
+        } else {
+            openList.clear();
         }
     }
 
