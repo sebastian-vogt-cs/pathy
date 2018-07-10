@@ -48,9 +48,9 @@ class Interactive {
                         ren.render(handler);
                     });
                     if(!input.contains("config")) {
-                        syncer.setFileName(input.substring(10, input.length() - 5) + "-config");
+                        syncer.setFileName(input.substring(10, input.length()) + "-config");
                     } else {
-                        syncer.setFileName(input.substring(10, input.length() - 5));
+                        syncer.setFileName(input.substring(10, input.length()));
                     }
                     ren.addFileName(syncer.getFileName());
                     printSuccess("File read");
