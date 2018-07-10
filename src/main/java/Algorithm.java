@@ -10,14 +10,20 @@ public class Algorithm<T extends Number> {
     private Node<T> startNode;
     private Node<T> endNode;
 
-    Algorithm(NodeHandler nodeHandler) {
+    Algorithm(NodeHandler<T> nodeHandler) {
         this.nodeHandler = nodeHandler;
-        openList = new ArrayList<>();
     }
 
     ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) {
+        nodeHandler.getNodes().forEach(node -> {
+            node.setPredecessor(null);
+            node.setDistance(Optional.empty());
+        });
+
+        openList = new ArrayList<>();
         this.startNode = startNode;
         this.endNode = endNode;
+
         openList.add(startNode);
 
         while (openList.size() > 0) {
@@ -31,7 +37,6 @@ public class Algorithm<T extends Number> {
             return path;
         } else {
             // no connection
-            System.out.println("DEBUG: endNode: " + endNode.getName());
             return null;
         }
     }
