@@ -17,7 +17,6 @@ class Algorithm<T extends Number> {
 
     ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) throws NoSuchElementException {
         if (startNode == null || endNode == null) {
-            Interactive.printFailure("Node not found");
             throw new NoSuchElementException();
         }
 
