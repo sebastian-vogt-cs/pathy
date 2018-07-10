@@ -25,7 +25,7 @@ class FileSyncer {
         try {
             createFile();
         } catch(Exception ex) {
-            System.out.print("Unhandled exception in FileSyncer contructor" + ex.getMessage());
+            System.out.print("Unhandled exception in FileSyncer constructor" + ex.getMessage());
         }
     }
 

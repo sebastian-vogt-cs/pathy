@@ -21,7 +21,6 @@ class Renderer<T extends Number> {
                     "	fill-color: yellow;" +
                     "}";
     private Graph graph;
-    private boolean isRendered;
 
     Renderer() {
         graph = new SingleGraph("graph");

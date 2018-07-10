@@ -8,7 +8,7 @@ public class NodeHandler<T extends Number> {
     // this vector stores all the nodes
     private Vector<Node<T>> nodes = new Vector<>();
 
-    private Algorithm<T> algorithm = new Algorithm<>(this);
+    private Algorithm<T> algorithm = new Algorithm<>();
 
     Vector<Node<T>> getNodes() {
         return nodes;
@@ -47,14 +47,6 @@ public class NodeHandler<T extends Number> {
             }
         }
         return null;
-    }
-
-    Node<T> getPredecessorByName(String name) {
-        return getNodeByName(name).getPredecessor();
-    }
-
-    Optional<T> getDistanceByName(String name) {
-        return getNodeByName(name).getDistance();
     }
 
     public String toString() {

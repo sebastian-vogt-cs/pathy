@@ -1,6 +1,7 @@
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Scanner;
 
 import static org.fusesource.jansi.Ansi.*;
 
@@ -11,11 +12,6 @@ class Interactive {
     private Optional<NodeHandler<Double>> handD = Optional.empty();
     private Optional<NodeHandler<Long>> handL = Optional.empty();
     private FileSyncer syncer = new FileSyncer(Type.INTEGER);
-    private boolean exit = false;
-
-    boolean exit() {
-        return exit;
-    }
 
     void interpretCommand() {
         printText("Type your command");
@@ -258,11 +254,11 @@ class Interactive {
 
     }
 
-    static void printText(String output) {
+    private static void printText(String output) {
         System.out.println( ansi().eraseScreen().render("@|blue > " + output + "|@") );
     }
 
-    static void printSuccess(String output) {
+    private static void printSuccess(String output) {
         System.out.println( ansi().eraseScreen().render("@|green >> " + output + "|@") );
     }
 
@@ -295,8 +291,9 @@ class Interactive {
 
         for (int i = 0; i < path.size(); i++) {
             if(i > 0) {
-                ren.markEdge(path.get(i).getName() + path.get(i - 1).getName());
-                ren.markEdge(path.get(i - 1).getName() + path.get(i).getName());
+                if(!ren.markEdge(path.get(i).getName() + path.get(i - 1).getName()) && !ren.markEdge(path.get(i - 1).getName() + path.get(i).getName())) {
+                    printFailure("An error occurred coloring the nodes");
+                }
             }
         }
     }

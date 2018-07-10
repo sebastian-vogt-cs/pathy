@@ -6,7 +6,7 @@ public class App {
     private Interactive interactive = new Interactive();
 
     private void mainLoop() {
-        while(!interactive.exit()) {
+        while(true) {
             interactive.interpretCommand();
         }
     }

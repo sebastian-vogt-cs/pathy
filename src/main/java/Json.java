@@ -126,8 +126,4 @@ class Json {
         }
     }
 
-    Type getType() {
-        return type;
-    }
-
 }
