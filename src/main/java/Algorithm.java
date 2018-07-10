@@ -1,17 +1,15 @@
 import java.util.*;
 
-public class Algorithm<T extends Number> {
-    ArrayList<Node<T>> path;
+class Algorithm<T extends Number> {
+
+    private ArrayList<Node<T>> path;
 
     private ArrayList<Node<T>> openList;
-
-    private NodeHandler<T> nodeHandler;
 
     private Node<T> startNode;
     private Node<T> endNode;
 
-    Algorithm(NodeHandler nodeHandler) {
-        this.nodeHandler = nodeHandler;
+    Algorithm() {
         openList = new ArrayList<>();
     }
 
@@ -36,8 +34,7 @@ public class Algorithm<T extends Number> {
         }
     }
 
-    void walk(Node<T> here){
-        here.setVisited(true);
+    private void walk(Node<T> here){
         removeFromOpenList(here);
         if (here != endNode) {
             for (Node<T> next : here.getEdges().keySet()) {
@@ -62,23 +59,12 @@ public class Algorithm<T extends Number> {
         }
     }
 
-    private void addToOpenList(Node<T> n) {
-        if (!openList.contains(n)) {
-            openList.add(n);
-        }
-    }
-
     private void removeFromOpenList(Node<T> n) {
         openList.remove(n);
     }
 
     private void sortOpenList() {
-        Collections.sort(openList, new Comparator<Node<T>>() {
-            @Override
-            public int compare(Node<T> t1, Node<T> t2) {
-                return Type.compare(t1.getDistance().get(), t2.getDistance().get());
-            }
-        });
+        Collections.sort(openList, (t1, t2) -> Type.compare(t1.getDistance().get(), t2.getDistance().get()));
     }
 
     private void storePath(Node<T> n){

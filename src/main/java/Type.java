@@ -5,7 +5,7 @@ public enum Type {
 
     private final String fieldDescription;
 
-    private Type(String value) {
+    Type(String value) {
         fieldDescription = value;
     }
 
@@ -13,6 +13,7 @@ public enum Type {
         return fieldDescription;
     }
 
+    @SuppressWarnings("unchecked")
     static <T extends Number> T add(T one, T two) {
         
         if (one.getClass().getTypeName().equals(INTEGER.toString())) {
