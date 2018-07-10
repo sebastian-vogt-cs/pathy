@@ -18,7 +18,7 @@ class Renderer<T extends Number> {
                     "	fill-color: red;" +
                     "}" +
                     "edge.path {" +
-                    "	fill-color: yellow;" +
+                    "	fill-color: blue;" +
                     "}";
     private Graph graph;
 
@@ -74,6 +74,12 @@ class Renderer<T extends Number> {
             return true;
         } catch (Exception ex) {
             return false;
+        }
+    }
+
+    void clearEdgeMarks() {
+        for(Edge edge : graph.getEdgeSet()) {
+            edge.removeAttribute("ui.class");
         }
     }
 

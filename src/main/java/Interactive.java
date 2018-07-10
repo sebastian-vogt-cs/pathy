@@ -289,7 +289,7 @@ class Interactive {
         if (path == null) {
             return;
         }
-
+        ren.clearEdgeMarks();
         for (int i = 0; i < path.size(); i++) {
             if(i > 0) {
                 if(!ren.markEdge(path.get(i).getName() + path.get(i - 1).getName()) && !ren.markEdge(path.get(i - 1).getName() + path.get(i).getName())) {
