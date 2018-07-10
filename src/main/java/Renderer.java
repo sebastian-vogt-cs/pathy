@@ -17,7 +17,7 @@ class Renderer<T extends Number> {
                     "node.marked {" +
                     "	fill-color: red;" +
                     "}" +
-                    "node.path {" +
+                    "edge.path {" +
                     "	fill-color: yellow;" +
                     "}";
     private Graph graph;
@@ -71,7 +71,7 @@ class Renderer<T extends Number> {
 
     boolean markEdge(String name) {
         try{
-            graph.getNode(name).addAttribute("ui.class", "path");
+            graph.getEdge(name).addAttribute("ui.class", "path");
             return true;
         } catch (Exception ex) {
             return false;

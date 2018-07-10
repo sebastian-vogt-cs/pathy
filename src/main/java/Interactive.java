@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -162,18 +163,19 @@ class Interactive {
                     printFailure("Please specify exactly two parameters");
                 } else {
                     handI.ifPresent(handler -> {
-                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
-                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
+                        ArrayList<Node<Integer>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                        printPath(list);
+                        markPath(list);
                     });
                     handD.ifPresent(handler -> {
-                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
-                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
-
+                        ArrayList<Node<Double>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                        printPath(list);
+                        markPath(list);
                     });
                     handL.ifPresent(handler -> {
-                        printPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
-                        markPath(handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1])));
-
+                        ArrayList<Node<Long>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                        printPath(list);
+                        markPath(list);
                     });
                 }
             }
@@ -280,8 +282,11 @@ class Interactive {
     }
 
     private <T extends Number> void markPath(ArrayList<Node<T>> path) {
-        for (Node<T> aPath : path) {
-            ren.markEdge(aPath.getName());
+        for (int i = 0; i < path.size(); i++) {
+            if(i > 0) {
+                ren.markEdge(path.get(i).getName() + path.get(i - 1).getName());
+                ren.markEdge(path.get(i - 1).getName() + path.get(i).getName());
+            }
         }
     }
 
