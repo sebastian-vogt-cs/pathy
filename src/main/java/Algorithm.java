@@ -14,7 +14,12 @@ public class Algorithm<T extends Number> {
         this.nodeHandler = nodeHandler;
     }
 
-    ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) {
+    ArrayList<Node<T>> run(Node<T> startNode, Node<T> endNode) throws NoSuchElementException {
+        if (startNode == null || endNode == null) {
+            Interactive.printFailure("Node not found");
+            throw new NoSuchElementException();
+        }
+
         nodeHandler.getNodes().forEach(node -> {
             node.setPredecessor(null);
             node.setDistance(Optional.empty());
@@ -41,7 +46,7 @@ public class Algorithm<T extends Number> {
         }
     }
 
-    void walk(Node<T> here){
+    void walk(Node<T> here) {
         here.setVisited(true);
         removeFromOpenList(here);
         if (here != endNode) {

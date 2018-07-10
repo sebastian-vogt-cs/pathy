@@ -1,9 +1,6 @@
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import static org.fusesource.jansi.Ansi.*;
 
@@ -162,21 +159,25 @@ class Interactive {
                 if (arguments.length != 2) {
                     printFailure("Please specify exactly two parameters");
                 } else {
-                    handI.ifPresent(handler -> {
-                        ArrayList<Node<Integer>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
-                        printPath(list);
-                        markPath(list);
-                    });
-                    handD.ifPresent(handler -> {
-                        ArrayList<Node<Double>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
-                        printPath(list);
-                        markPath(list);
-                    });
-                    handL.ifPresent(handler -> {
-                        ArrayList<Node<Long>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
-                        printPath(list);
-                        markPath(list);
-                    });
+                    try {
+                        handI.ifPresent(handler -> {
+                            ArrayList<Node<Integer>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                            printPath(list);
+                            markPath(list);
+                        });
+                        handD.ifPresent(handler -> {
+                            ArrayList<Node<Double>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                            printPath(list);
+                            markPath(list);
+                        });
+                        handL.ifPresent(handler -> {
+                            ArrayList<Node<Long>> list = handler.getAlgorithm().run(handler.getNodeByName(arguments[0]), handler.getNodeByName(arguments[1]));
+                            printPath(list);
+                            markPath(list);
+                        });
+                    } catch (NoSuchElementException e) {
+                        printFailure("Node not found");
+                    }
                 }
             }
         } else if(input.length() > 3 && input.substring(0, 4).equals("help")) {
@@ -270,18 +271,28 @@ class Interactive {
     }
 
     private <T extends Number> void printPath(ArrayList<Node<T>> path) {
-        for (int i = 0; i < path.size(); i++) {
-            System.out.print(path.get(i).getName());
-            if (i < path.size() - 1) {
-                System.out.print(" -> ");
-            } else {
-                System.out.println();
+        if (path != null) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < path.size(); i++) {
+                builder.append(path.get(i).getName());
+                if (i < path.size() - 1) {
+                    builder.append(" -> ");
+                }
             }
+            printSuccess(builder.toString());
+
+            T distance = path.get(path.size() - 1).getDistance().get();
+            printSuccess("Distance: " + distance);
+        } else {
+            printSuccess("No path found");
         }
-        // TODO printSuccess, distance
     }
 
     private <T extends Number> void markPath(ArrayList<Node<T>> path) {
+        if (path == null) {
+            return;
+        }
+
         for (int i = 0; i < path.size(); i++) {
             if(i > 0) {
                 ren.markEdge(path.get(i).getName() + path.get(i - 1).getName());
